@@ -1,5 +1,9 @@
 # Airflow with ECS (Proof of Concept)
 
+I built this Repo as part of Proof of Concept for my blog posts:
+
+- https://chris.towles.me/blog/apache-airflow-part-1-why-and-goals
+
 
 ## Purpose
 
