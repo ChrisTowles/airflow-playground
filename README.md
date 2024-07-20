@@ -25,9 +25,6 @@ I am however going to put a few constraints in place around how I want to use Ai
     - This isn't a hard requirement could use an EC2 instance and updated in place but that another box to maintain long term.
       - If instead it was just ECS pointing at an RDS database, you could restore the DB from snapshot and test a deployment before release to production.
 
-
-
-
 ## Links
 
 - <https://aws.amazon.com/blogs/containers/running-airflow-on-aws-fargate/>
@@ -42,3 +39,28 @@ I am however going to put a few constraints in place around how I want to use Ai
   - CloudFormation
 - <https://github.com/aelzeiny/airflow-aws-executors>
   - AWS Executor that delegates every task to a scheduled container on either AWS Batch, AWS Fargate, or AWS ECS.
+
+## Steps for initial setup
+
+- [Install docker](https://docs.docker.com/engine/install/)
+- [Install minikube](https://minikube.sigs.k8s.io/docs/start/)
+- start minicube
+
+```bash
+## start
+minikube start`
+```
+> if you get an error `docker: Not healthy: "docker version --format {{.Server.Os}}-{{.Server.Version}}:{{.Server.Platform.Name}}" exit status 1: permission denied while trying to connect to the Docker daemon socket a....`
+>
+> you need to https://docs.docker.com/engine/install/linux-postinstall/ and retry.
+
+
+![](./docs/images/minikube-start.png)
+
+
+- [Install kubectl](https://kubernetes.io/docs/tasks/tools/)
+
+```bash
+
+
+```
