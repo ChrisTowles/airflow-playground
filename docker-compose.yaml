@@ -1,9 +1,6 @@
 
 # Note: originally started from - https://airflow.apache.org/docs/apache-airflow/2.9.3/docker-compose.yaml
 
-
-
-
 # Basic Airflow cluster configuration for CeleryExecutor with Redis and PostgreSQL.
 #
 # WARNING: This configuration is for local development. Do not use it in a production deployment.
@@ -31,7 +28,6 @@
 #                                Default: ''
 #
 # Feel free to modify this file to suit your needs.
----
 x-airflow-common:
   &airflow-common
   # In order to add custom dependencies or upgrade provider packages you can use your extended image.
@@ -41,7 +37,6 @@ x-airflow-common:
   # build: .
   environment:
     &airflow-common-env
-
     AIRFLOW__CORE__EXECUTOR: CeleryExecutor
     AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
     AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://airflow:airflow@postgres/airflow
@@ -228,7 +223,6 @@ services:
         exec /entrypoint airflow version
     # yamllint enable rule:line-length
     environment:
-      AIRFLOW_UID: 50000
       <<: *airflow-common-env
       _AIRFLOW_DB_MIGRATE: 'true'
       _AIRFLOW_WWW_USER_CREATE: 'true'
