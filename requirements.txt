@@ -1,0 +1,7 @@
+# This requirements.txt file is intended for the repository's scripts and such
+# not for the Docker images contained within.
+#
+
+pip==24.0
+setuptools==70.0.0
+wheel==0.43.0

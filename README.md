@@ -25,10 +25,16 @@ I am however going to put a few constraints in place around how I want to use Ai
     - This isn't a hard requirement could use an EC2 instance and updated in place but that another box to maintain long term.
       - If instead it was just ECS pointing at an RDS database, you could restore the DB from snapshot and test a deployment before release to production.
 
+## Documents
+
+- [Kubernetes Notes](./docs/kubernetes_notes.md)
+
 ## Links
 
 - <https://aws.amazon.com/blogs/containers/running-airflow-on-aws-fargate/>
-
+- <https://airflow.apache.org/docs/docker-stack/build.html>
+- MWAA Docker images 
+  - https://github.com/aws/amazon-mwaa-docker-images
 ## Examples I've reviewed
 
 - <https://github.com/NASA-IMPACT/self-managed-apache-airflow>
@@ -40,51 +46,28 @@ I am however going to put a few constraints in place around how I want to use Ai
 - <https://github.com/aelzeiny/airflow-aws-executors>
   - AWS Executor that delegates every task to a scheduled container on either AWS Batch, AWS Fargate, or AWS ECS.
 
-## Steps for initial setup
 
-- [Install docker](https://docs.docker.com/engine/install/)
-- [Install minikube](https://minikube.sigs.k8s.io/docs/start/)
-- start minicube
+## Setup Python with yenv
 
 ```bash
-## start
-minikube start`
+pyenv install 3.12
+pyenv virtualenv 3.12 airflow-playground
+
+# set pyenv to use the new environment
+pyenv local airflow-playground
+pyenv shell airflow-playground
+
+# show which python is being used
+pyenv which python
 ```
 
-> if you get an error `docker: Not healthy: "docker version --format {{.Server.Os}}-{{.Server.Version}}:{{.Server.Platform.Name}}" exit status 1: permission denied while trying to connect to the Docker daemon socket a....`
->
-> You need to <https://docs.docker.com/engine/install/linux-postinstall/> and retry.
-
-![](./docs/images/minikube-start.png)
-
-- [Install kubectl](https://kubernetes.io/docs/tasks/tools/)
+Install latest pip and dependencies for scripts
 
 ```bash
-# check everything started correctly
-kubectl get all -A
-```
-
-- [Install helm](https://helm.sh/docs/intro/install/)
-
-- Add the Apache Airflow Helm chart repository:
-
-```bash
-helm repo add apache-airflow https://airflow.apache.org
-helm upgrade --install airflow apache-airflow/airflow --namespace airflow --create-namespace
-```
-
-Install result.
-
-![](/docs/images/helm-install-of-airflow.png)
-
-```bash
-## forward port for Airflow webserver URL 
-kubectl port-forward svc/airflow-webserver 8080:8080 --namespace airflow
+pip install --upgrade pip
+pip install -r requirements.txt
 
 ```
-
-> Note!
-> kubectl port-forward does not return. To continue with the exercises, you will need to open another terminal.
 
 ## Access Airflow UI
 
