@@ -2,7 +2,7 @@
 
 I built this Repo as part of Proof of Concept for my blog posts:
 
-- <https://chris.towles.me/blog/apache-airflow-part-1-why-and-goals>
+- <https://chris.towles.dev/blog/apache-airflow-part-1-why-and-goals>
 
 ## My goals
 
@@ -33,8 +33,9 @@ I am however going to put a few constraints in place around how I want to use Ai
 
 - <https://aws.amazon.com/blogs/containers/running-airflow-on-aws-fargate/>
 - <https://airflow.apache.org/docs/docker-stack/build.html>
-- MWAA Docker images 
+- MWAA Docker images
   - https://github.com/aws/amazon-mwaa-docker-images
+
 ## Examples I've reviewed
 
 - <https://github.com/NASA-IMPACT/self-managed-apache-airflow>
@@ -46,8 +47,7 @@ I am however going to put a few constraints in place around how I want to use Ai
 - <https://github.com/aelzeiny/airflow-aws-executors>
   - AWS Executor that delegates every task to a scheduled container on either AWS Batch, AWS Fargate, or AWS ECS.
 
-
-## Setup Python with yenv
+## Setup Python with pyenv
 
 ```bash
 pyenv install 3.12
@@ -61,7 +61,7 @@ pyenv shell airflow-playground
 pyenv which python
 ```
 
-Install latest pip and dependencies for scripts
+Install the latest pip and dependencies for scripts
 
 ```bash
 pip install --upgrade pip
@@ -71,3 +71,5 @@ pip install -r requirements.txt
 
 ## Access Airflow UI
 
+- create `.env` from `.env.example`
+- `docker compose up airflow-ini` to start airflow with the local provider and sqlite db
