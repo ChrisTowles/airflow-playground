@@ -45,4 +45,8 @@ airflow-webserver-1  | PermissionError: [Errno 13] Permission denied: '/opt/airf
 
 The solution is to run `chmod 777 ./logs` for each of the directories that you want to give access.
 
+You can also do them all with.
 
+```bash
+chmod 777 ./dags ./logs ./plugins ./config
+```
