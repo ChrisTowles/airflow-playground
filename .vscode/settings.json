@@ -4,6 +4,7 @@
     "markdownPasteImage.imageFolderPath": "${projectRoot}/docs/images/",
     "cSpell.words": [
         "minikube",
+        "Triggerer",
         "webserver"
     ],
 }

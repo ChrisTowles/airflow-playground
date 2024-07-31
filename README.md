@@ -34,7 +34,9 @@ I am however going to put a few constraints in place around how I want to use Ai
 - <https://aws.amazon.com/blogs/containers/running-airflow-on-aws-fargate/>
 - <https://airflow.apache.org/docs/docker-stack/build.html>
 - MWAA Docker images
-  - https://github.com/aws/amazon-mwaa-docker-images
+  - <https://github.com/aws/amazon-mwaa-docker-images>
+- Airflow Triggerer - The Triggerer allows tasks to be paused and resumed
+  <https://www.restack.io/docs/airflow-knowledge-airflow-triggerer-guide>
 
 ## Examples I've reviewed
 
