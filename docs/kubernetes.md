@@ -38,7 +38,7 @@ helm upgrade --install airflow apache-airflow/airflow --namespace airflow --crea
 
 Install result.
 
-![](/docs/images/helm-install-of-airflow.png)
+![helm-install-of-airflow](/docs/images/helm-install-of-airflow.png)
 
 ```bash
 ## forward port for Airflow webserver URL 
