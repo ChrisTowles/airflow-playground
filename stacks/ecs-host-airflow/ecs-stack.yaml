@@ -1,0 +1,57 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description:  This template deploys airflow on rds with an RDS database
+
+
+Parameters:
+  ConfigName:
+    Description: The name of the configuration.
+    Type: String
+
+
+# Mappings: 
+#   Configs:
+#     dev:
+      #DBClusterIdentifier: airflow-cluster-01
+      #PrivateSubnetIds: 123
+
+Resources:
+ 
+  RdsUserAccountSecret:
+    Type: 'AWS::SecretsManager::Secret'
+    Properties:
+      Name: /airflow-playground/rds-account
+      Description: "Rds secret created by AWS CloudFormation"
+      GenerateSecretString:
+        SecretStringTemplate: '{"username": "sa"}'
+        GenerateStringKey: password
+        PasswordLength: 32
+  
+
+  # DBSubnetGroup:
+  #   Type: 'AWS::RDS::DBSubnetGroup'
+  #   Properties:
+  #     DBSubnetGroupDescription: !Ref 'AWS::StackName'
+  #     SubnetIds: !Ref PrivateSubnetIds
+  
+  # RDSDBCluster:
+  #   Type: 'AWS::RDS::DBCluster'
+  #   DeletionPolicy: Delete
+  #   Properties:
+  #     Engine: aurora-postgresql
+  #     DatabaseName: !Ref DatabaseName
+  #     DBClusterIdentifier:  !FindInMap [Configs, !Ref ConfigName, DBClusterIdentifier]
+  #     DBSubnetGroupName: !Ref DBSubnetGroup
+  #     MasterUsername: !Ref DBMasterUsername
+  #     MasterUserPassword: !Ref DBMasterUserPassword
+  #     ServerlessV2ScalingConfiguration:
+  #       MinCapacity: !Ref DBMinCapacity
+  #       MaxCapacity: !Ref DBMaxCapacity
+  #     VpcSecurityGroupIds: !Ref SecurityGroups
+  #     Port: !Ref DBPort
+
+  # RDSDBInstance:
+  #     Type: 'AWS::RDS::DBInstance'
+  #     Properties:
+  #       Engine: aurora-postgresql
+  #       DBInstanceClass: db.serverless
+  #       DBClusterIdentifier: !FindInMap [Configs, !Ref ConfigName, DBClusterIdentifier]

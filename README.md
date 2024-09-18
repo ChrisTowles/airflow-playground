@@ -75,3 +75,4 @@ pip install -r requirements.txt
 
 - create `.env` from `.env.example`
 - `docker compose up airflow-ini` to start airflow with the local provider and sqlite db
+

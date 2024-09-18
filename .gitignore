@@ -1,6 +1,7 @@
 # Airflow
 airflow-mounts/logs/
 
+temp/
 
 
 # Byte-compiled / optimized / DLL files
