@@ -8,12 +8,19 @@ Parameters:
     Type: String
 
 
-# Mappings: 
-#   Configs:
-#     dev:
-      #DBClusterIdentifier: airflow-cluster-01
-      #PrivateSubnetIds: 123
-
+Mappings: 
+  Configs:
+    dev:
+      DBClusterIdentifier: airflow-cluster-01
+      DBName: airflow-db
+      SubnetIds: 
+        - subnet-1301c532
+        - subnet-076a9461
+      VpcId: vpc-509d972a
+      ServerlessV2ScalingMinCapacity: 0.5
+      ServerlessV2ScalingMaxCapacity: 1
+   
+   
 Resources:
  
   RdsUserAccountSecret:
@@ -25,27 +32,55 @@ Resources:
         SecretStringTemplate: '{"username": "sa"}'
         GenerateStringKey: password
         PasswordLength: 32
-  
 
-  # DBSubnetGroup:
-  #   Type: 'AWS::RDS::DBSubnetGroup'
-  #   Properties:
-  #     DBSubnetGroupDescription: !Ref 'AWS::StackName'
-  #     SubnetIds: !Ref PrivateSubnetIds
+
+  RdsSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupName: sg-airflow-rds
+      GroupDescription: RDS DB cluster security group
+      VpcId: !FindInMap [Configs, !Ref ConfigName, VpcId]
+
+
+  RdsDbClusterEgressRule:
+    Type: 'AWS::EC2::SecurityGroupEgress'
+    Properties:
+      Description: Allow all outbound traffic from the RDS DB cluster security group.
+      GroupId: !Ref RdsSecurityGroup
+      CidrIp: 0.0.0.0/0
+      IpProtocol: "-1"
+
+  RdsDbClusterIngressRule:
+    Type: 'AWS::EC2::SecurityGroupIngress'
+    Properties:
+      Description: Allow inbound traffic to the Rds DB
+      GroupName: !Ref RdsSecurityGroup
+      IpProtocol: tcp
+      FromPort: 5432
+      ToPort: 5432
+      CidrIp: 	172.31.0.0/16
+ 
+
+  DbSubnetGroup:
+    Type: 'AWS::RDS::DBSubnetGroup'
+    Properties:
+      DBSubnetGroupName: airflow-rds-subnet-group
+      DBSubnetGroupDescription: airflow rds subnet group
+      SubnetIds: !FindInMap [Configs, !Ref ConfigName, SubnetIds]
   
-  # RDSDBCluster:
+  # RdsDbCluster:
   #   Type: 'AWS::RDS::DBCluster'
   #   DeletionPolicy: Delete
   #   Properties:
   #     Engine: aurora-postgresql
-  #     DatabaseName: !Ref DatabaseName
+  #     DatabaseName: !FindInMap [Configs, !Ref ConfigName, DBName]
   #     DBClusterIdentifier:  !FindInMap [Configs, !Ref ConfigName, DBClusterIdentifier]
-  #     DBSubnetGroupName: !Ref DBSubnetGroup
-  #     MasterUsername: !Ref DBMasterUsername
-  #     MasterUserPassword: !Ref DBMasterUserPassword
+  #     DBSubnetGroupName: !Ref DbSubnetGroup
+  #     MasterUsername: sa
+  #     MasterUserPassword: !Join [ ':', [!Sub '{{resolve:secretsmanager', !Ref RdsUserAccountSecret, ':SecretString:password}}']]
   #     ServerlessV2ScalingConfiguration:
-  #       MinCapacity: !Ref DBMinCapacity
-  #       MaxCapacity: !Ref DBMaxCapacity
+  #       MinCapacity: !FindInMap [Configs, !Ref ConfigName, ServerlessV2ScalingMinCapacity] # smallest value that you can use is 0.5. ACUs. 
+  #       MaxCapacity: !FindInMap [Configs, !Ref ConfigName, ServerlessV2ScalingMaxCapacity] # maximum must be higher than 0.5 ACUs
   #     VpcSecurityGroupIds: !Ref SecurityGroups
   #     Port: !Ref DBPort
 
