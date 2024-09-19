@@ -8,17 +8,19 @@ Parameters:
     Type: String
 
 
+# Note: I use mappings are used rather than passing in tons of parameters, the sam linter helps validate they are correct and much easier to reason about.
 Mappings: 
   Configs:
     dev:
-      DBClusterIdentifier: airflow-cluster-01
-      DBName: airflow-db
+      VpcId: vpc-509d972a
       SubnetIds: 
         - subnet-1301c532
         - subnet-076a9461
-      VpcId: vpc-509d972a
-      ServerlessV2ScalingMinCapacity: 0.5
-      ServerlessV2ScalingMaxCapacity: 1
+      DbClusterIdentifier: airflow-cluster-01
+      DbName: airflow-db
+      DbMinCapacity: 0.5
+      DbMaxCapacity: 1
+
    
    
 Resources:
@@ -27,17 +29,16 @@ Resources:
     Type: 'AWS::SecretsManager::Secret'
     Properties:
       Name: /airflow-playground/rds-account
-      Description: "Rds secret created by AWS CloudFormation"
+      Description: "Rds secret for Airflow"
       GenerateSecretString:
         SecretStringTemplate: '{"username": "sa"}'
         GenerateStringKey: password
         PasswordLength: 32
 
-
   RdsSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
-      GroupName: sg-airflow-rds
+      GroupName: airflow-rds-sg
       GroupDescription: RDS DB cluster security group
       VpcId: !FindInMap [Configs, !Ref ConfigName, VpcId]
 
@@ -54,11 +55,11 @@ Resources:
     Type: 'AWS::EC2::SecurityGroupIngress'
     Properties:
       Description: Allow inbound traffic to the Rds DB
-      GroupName: !Ref RdsSecurityGroup
+      GroupId: !Ref RdsSecurityGroup
       IpProtocol: tcp
       FromPort: 5432
       ToPort: 5432
-      CidrIp: 	172.31.0.0/16
+      CidrIp: 172.31.0.0/16
  
 
   DbSubnetGroup:
@@ -73,20 +74,20 @@ Resources:
   #   DeletionPolicy: Delete
   #   Properties:
   #     Engine: aurora-postgresql
-  #     DatabaseName: !FindInMap [Configs, !Ref ConfigName, DBName]
-  #     DBClusterIdentifier:  !FindInMap [Configs, !Ref ConfigName, DBClusterIdentifier]
+  #     DatabaseName: !FindInMap [Configs, !Ref ConfigName, DbName]
+  #     DBClusterIdentifier:  !FindInMap [Configs, !Ref ConfigName, DbClusterIdentifier]
   #     DBSubnetGroupName: !Ref DbSubnetGroup
   #     MasterUsername: sa
   #     MasterUserPassword: !Join [ ':', [!Sub '{{resolve:secretsmanager', !Ref RdsUserAccountSecret, ':SecretString:password}}']]
   #     ServerlessV2ScalingConfiguration:
-  #       MinCapacity: !FindInMap [Configs, !Ref ConfigName, ServerlessV2ScalingMinCapacity] # smallest value that you can use is 0.5. ACUs. 
-  #       MaxCapacity: !FindInMap [Configs, !Ref ConfigName, ServerlessV2ScalingMaxCapacity] # maximum must be higher than 0.5 ACUs
-  #     VpcSecurityGroupIds: !Ref SecurityGroups
-  #     Port: !Ref DBPort
+  #       MinCapacity: !FindInMap [Configs, !Ref ConfigName, DbMinCapacity] # smallest value that you can use is 0.5. ACUs. 
+  #       MaxCapacity: !FindInMap [Configs, !Ref ConfigName, DbMaxCapacity] # maximum must be higher than 0.5 ACUs
+  #     VpcSecurityGroupIds: !Ref RdsSecurityGroup
+  #     Port: 5432
 
-  # RDSDBInstance:
+  # RDSDbInstance:
   #     Type: 'AWS::RDS::DBInstance'
   #     Properties:
   #       Engine: aurora-postgresql
   #       DBInstanceClass: db.serverless
-  #       DBClusterIdentifier: !FindInMap [Configs, !Ref ConfigName, DBClusterIdentifier]
+  #       DBClusterIdentifier: !FindInMap [Configs, !Ref ConfigName, DbClusterIdentifier]
