@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e;  # stop on errors
 
-TEMPLATE_FILE=stacks/ecs-host-airflow/ecs-stack.yaml
-STACK_NAME="airflow-playground-ecs"
+TEMPLATE_FILE=stacks/01-rds-stack/01-rds-stack.yaml
+STACK_NAME="airflow-playground-01-rds"
 AWS_PROFILE=default
 
 sam validate --profile $AWS_PROFILE --template $TEMPLATE_FILE  --region us-east-1 --lint
