@@ -39,6 +39,7 @@ I am however going to put a few constraints in place around how I want to use Ai
   <https://www.restack.io/docs/airflow-knowledge-airflow-triggerer-guide>
 - DBT
   - https://data-dive.com/deploy-dbt-on-aws-using-ecs-fargate-with-airflow-scheduling/
+  - https://gitlab.com/snowflakeproto/dbtonawsfargate
 
 
 ## Examples I've reviewed
