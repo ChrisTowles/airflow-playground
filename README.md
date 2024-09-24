@@ -37,6 +37,9 @@ I am however going to put a few constraints in place around how I want to use Ai
   - <https://github.com/aws/amazon-mwaa-docker-images>
 - Airflow Triggerer - The Triggerer allows tasks to be paused and resumed
   <https://www.restack.io/docs/airflow-knowledge-airflow-triggerer-guide>
+- DBT
+  - https://data-dive.com/deploy-dbt-on-aws-using-ecs-fargate-with-airflow-scheduling/
+
 
 ## Examples I've reviewed
 
